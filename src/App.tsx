@@ -76,7 +76,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen px-20 py-10 items-center">
+    <div className="flex flex-col h-screen w-screen px-9 md:px-20 py-10 items-center">
       <Button
         variant="outline"
         size="sm"
