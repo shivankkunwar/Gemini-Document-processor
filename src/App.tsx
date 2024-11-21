@@ -19,6 +19,9 @@ export default function App() {
       setFile(event.target.files[0]);
     }
   };
+  const handleGitHubClick = () => {
+    window.open('https://github.com/shivankkunwar/Gemini-Document-processor', '_blank');
+  };
 
   const readFileAsBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -75,6 +78,7 @@ export default function App() {
         variant="outline"
         size="sm"
         className="text-white w-fit bg-slate-950 p-5 border-white/20 hover:bg-white/10"
+        onClick={handleGitHubClick}
       >
         <FiGithub className="mr-2" />
         GitHub
