@@ -76,7 +76,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen px-9 md:px-20 py-10 items-center">
+    <div className="flex flex-col h-screen w-screen px-9 md:px-20 py-5 md:py-10 items-center">
       <Button
         variant="outline"
         size="sm"
@@ -103,7 +103,7 @@ export default function App() {
               placeholder="Enter your custom prompt for document processing"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              rows={4}
+              rows={3}
             />
             <Button
               onClick={handleGenerate}
@@ -126,7 +126,7 @@ export default function App() {
               placeholder="Generated insights will appear here..."
               value={response}
               readOnly
-              rows={8}
+              rows={6}
               className="mt-4"
             />
             
