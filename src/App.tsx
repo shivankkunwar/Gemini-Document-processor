@@ -20,7 +20,10 @@ export default function App() {
     }
   };
   const handleGitHubClick = () => {
-    window.open('https://github.com/shivankkunwar/Gemini-Document-processor', '_blank');
+    window.open(
+      "https://github.com/shivankkunwar/Gemini-Document-processor",
+      "_blank"
+    );
   };
 
   const readFileAsBase64 = (file: File): Promise<string> => {
@@ -41,16 +44,16 @@ export default function App() {
 
   const handleGenerate = async () => {
     if (!apiKey || !prompt || !file) return;
-    
+
     setLoading(true);
     setResponse("");
 
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      
+
       const base64 = await readFileAsBase64(file);
-      
+
       const result = await model.generateContent([
         {
           inlineData: {
@@ -126,9 +129,23 @@ export default function App() {
               rows={8}
               className="mt-4"
             />
+            
           </CardContent>
         </Card>
       </div>
+      <footer >
+              <p>
+              From concept to code ⚔️ by{" "}
+                <a
+                  href="https://portfolio-shivank.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  Shivank
+                </a>
+              </p>
+            </footer>
     </div>
   );
 }
