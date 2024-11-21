@@ -12,7 +12,7 @@ export default function App() {
   const [prompt, setPrompt] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -20,36 +20,45 @@ export default function App() {
     }
   };
 
+  const readFileAsBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result?.toString().split(",")[1];
+        if (base64) {
+          resolve(base64);
+        } else {
+          reject(new Error("Failed to read file as base64"));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleGenerate = async () => {
     if (!apiKey || !prompt || !file) return;
-
+    
     setLoading(true);
     setResponse("");
 
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      
+      const base64 = await readFileAsBase64(file);
+      
+      const result = await model.generateContent([
+        {
+          inlineData: {
+            data: base64,
+            mimeType: "application/pdf",
+          },
+        },
+        { text: prompt },
+      ]);
 
-      // Convert file to base64
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = async () => {
-        const base64 = reader.result?.toString().split(",")[1];
-
-        if (base64) {
-          const result = await model.generateContent([
-            {
-              inlineData: {
-                data: base64,
-                mimeType: "application/pdf",
-              },
-            },
-            { text: prompt },
-          ]);
-
-          setResponse(result.response.text());
-        }
-      };
+      setResponse(result.response.text());
     } catch (error) {
       console.error("Error processing document:", error);
       setResponse(
@@ -65,7 +74,7 @@ export default function App() {
       <Button
         variant="outline"
         size="sm"
-        className="text-white w-fit  bg-slate-950 p-5 border-white/20 hover:bg-white/10"
+        className="text-white w-fit bg-slate-950 p-5 border-white/20 hover:bg-white/10"
       >
         <FiGithub className="mr-2" />
         GitHub
